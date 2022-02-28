@@ -1,3 +1,3 @@
-# Remove Nth Node From End of List
+# Merge k Sorted Lists
 
 https://leetcode.com/problems/remove-nth-node-from-end-of-list/
