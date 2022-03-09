@@ -15,21 +15,24 @@
  */
 class Solution {
     public List<Integer> rightSideView(TreeNode root) {
-        //edge case
+        // return usingDFS(root);
+        return usingBFS(root);
+    }
+    
+    private List<Integer> usingBFS(TreeNode root) {
+        List<Integer> answer = new ArrayList<>();
         if (root == null) {
-            return new ArrayList<>();
+            return answer;
         }
         
-        //BFS
-        List<Integer> answer = new ArrayList<>();
         Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
-        
-        while (!queue.isEmpty()) {
+        while(!queue.isEmpty()) {
             int queueSize = queue.size();
             for (int i = 0; i < queueSize; i++) {
                 TreeNode curr = queue.poll();
-                if (i == (queueSize - 1)) { //rightmost element
+                
+                if (i == (queueSize - 1)) {
                     answer.add(curr.val);
                 }
                 
@@ -37,30 +40,38 @@ class Solution {
                 if (curr.right != null) queue.offer(curr.right);
             }
         }
-        return answer;
-    }
-}
-
-
-class Solution {
-    List<Integer> answer = new ArrayList<>(); 
-    public List<Integer> rightSideView(TreeNode root) {
-        //edge case
-        if (root == null) return answer;
-        dfsHelper(root, 0);
+        
         return answer;
     }
     
-    public void dfsHelper(TreeNode root, int level) {
-        if (level == answer.size())
+    private List<Integer> usingDFS(TreeNode root) {
+        List<Integer> answer = new ArrayList<>();
+        //edge case
+        if (root == null) {
+            return answer;
+        }
+        
+        dfsHelper(root, 0, answer);
+        return answer;
+    }
+    
+    private void dfsHelper(TreeNode root, int depth, List<Integer> answer) {
+        //base case
+        if (root == null) {
+            return ;
+        }
+        
+        //Add root to the depth(index) in answer list
+        if (answer.size() == depth) {
             answer.add(root.val);
-        
-        if (root.right != null) {
-            dfsHelper(root.right, level + 1);
         }
         
-        if (root.left != null) {
-            dfsHelper(root.left, level + 1);
-        }
+        //Right side view
+        dfsHelper(root.right, depth + 1, answer);
+        
+        //Calling left in case it's a left skewed tree
+        dfsHelper(root.left, depth + 1, answer);
+        
+        return ;
     }
 }
