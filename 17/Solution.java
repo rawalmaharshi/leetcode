@@ -39,3 +39,46 @@ class Solution {
     return output;
   }
 }
+
+
+class Solution2 {
+    public List<String> letterCombinations(String digits) {
+        List<String> answer = new ArrayList<>();
+        //edge case
+        if (digits == null || digits.length() == 0) {
+            return answer;
+        }
+        
+        String[] mapping = {
+            "0",
+            "1",
+            "abc",
+            "def",
+            "ghi",
+            "jkl",
+            "mno",
+            "pqrs",
+            "tuv",
+            "wxyz"
+        };
+        
+        combinationHelper(answer, digits, new StringBuilder(), 0, mapping);
+        return answer;
+    }
+    
+    public void combinationHelper(List<String> answer, String digits, StringBuilder current, int index, String[] mapping) {
+        //base case
+        if (index == digits.length()) {
+            answer.add(current.toString());
+            return ;
+        }
+        
+        String letters = mapping[digits.charAt(index) - '0'];
+        for (int i = 0; i < letters.length(); i++) {
+            combinationHelper(answer, digits, current.append(letters.charAt(i)), index + 1, mapping);
+            current.setLength(current.length() - 1);
+        }
+        
+        return ;
+    }
+}
