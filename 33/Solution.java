@@ -1,37 +1,44 @@
 class Solution {
     public int search(int[] nums, int target) {
-        int left = 0, right = nums.length - 1;
-        while (left < right) {
-            int mid = left + (right - left)/2;
-            if (nums[mid] > nums[right]) {
-                //array is stil shifted at this point
-                left = mid + 1;
+        /*Algo: 1st find the smallestElement index
+        determine where to search in the array with respect to smallest index
+        run another binary search to search there
+        */
+        
+        int start = 0, end = nums.length - 1;
+        int smallestIndex = 0;
+        
+        while (start < end) {
+            int mid = start + (end - start)/2;
+            if (nums[mid] > nums[end]) {
+                start = mid + 1;
             } else {
-                right = mid;
+                end = mid;
             }
         }
+        smallestIndex = start;  //after end of 1st binary search start = end
         
-        int start = left;
-        left = 0;
-        right = nums.length - 1;
-        
-        if (nums[start] <= target && target <= nums[right]) {
-            left = start;
+        // Reset start and end variables to determine which part of array to search 
+        //Use example of 5 and 1 in array [4,5,6,7,0,1,2] to understand why we have set the variables like this
+        start = 0;
+        end = nums.length - 1;
+        if (nums[smallestIndex] <= target && target <= nums[end]) {
+            start = smallestIndex;
         } else {
-            right = start;
+            end = smallestIndex;
         }
         
-        while (left <= right) {
-            int mid = left + (right - left)/2;
-            if (nums[mid] > target) {
-                right = mid - 1;
-            } else if (nums[mid] < target) {
-                left = mid + 1;
-            } else {
+        while (start <= end) {
+            int mid = start + (end - start)/2;
+            if (nums[mid] == target) {
                 return mid;
+            } else if(nums[mid] < target) {
+                start = mid + 1;
+            } else {
+                end = mid - 1;
             }
-        }
+        } 
         
-        return -1;  //if element not found
+        return -1;  //not found
     }
 }
