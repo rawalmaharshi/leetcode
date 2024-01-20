@@ -1,25 +1,41 @@
 class Solution {
+    List<String> answer = new ArrayList<>();
     public List<String> generateParenthesis(int n) {
-        List<String> ans = new ArrayList();
-        backtrack(ans, new StringBuilder(), 0, 0, n);
-        return ans;
+        backtrackingHelper(n, 0, 0, new StringBuilder());
+        return answer;
     }
 
-    public void backtrack(List<String> ans, StringBuilder cur, int open, int close, int max){
-        if (cur.length() == max * 2) {
-            ans.add(cur.toString());
-            return;
+    private void backtrackingHelper(int n, int openCount, int closeCount, StringBuilder sb) {
+        //end case
+        if (sb.length() == 2*n ) {    //opening + closing braces = 2*n
+            answer.add(new String(sb));
+            return ;
         }
 
-        if (open < max) {
-            cur.append("(");
-            backtrack(ans, cur, open+1, close, max);
-            cur.deleteCharAt(cur.length() - 1);
+        //can add more opening parentheses
+        if (openCount < n) {
+            //add
+            sb.append("(");
+
+            //recurse
+            backtrackingHelper(n, openCount + 1, closeCount, sb);
+
+            //remove
+            sb.deleteCharAt(sb.length() - 1);
         }
-        if (close < open) {
-            cur.append(")");
-            backtrack(ans, cur, open, close+1, max);
-            cur.deleteCharAt(cur.length() - 1);
+
+        //add more closing parentheses
+        if (closeCount < openCount) {
+            //add
+            sb.append(")");
+
+            //recurse
+            backtrackingHelper(n, openCount, closeCount + 1, sb);
+
+            //remove
+            sb.deleteCharAt(sb.length() - 1);
         }
+
+        return ;
     }
 }
