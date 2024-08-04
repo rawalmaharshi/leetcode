@@ -27,6 +27,11 @@ class Solution {
       return constantSpace(root);
   }
 
+  /*
+   * Need to make 2 connections as you traverse the linked list
+   *    1. Make connection between nodes sharing same parent (head.left.next = head.right)
+   *    2. For different parent (check if head.next is null) --> head.right.next = head.next.left
+   */
   public Node constantSpace(Node root) {
       //base case
       if (root == null) {
