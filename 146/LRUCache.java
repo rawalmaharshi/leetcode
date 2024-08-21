@@ -1,3 +1,8 @@
+/**
+ * 
+ * Better solution in LRUCache1
+ */
+
 public class LRUCache {
 
   class DLinkedNode {
