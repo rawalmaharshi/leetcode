@@ -1,68 +1,44 @@
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
-class Solution {
-    public int kthSmallest(TreeNode root, int k) {
-        //using pq
-        return usingPQ(root, k);
-        
-        //First create an inorder traversal of the tree (which is sorted in case of BST), then just find kth elem
-//         List<Integer> elems = findOrder(root);
-        
-//         int answer = 0;
-//         for (int i : elems) {
-//             if ((--k) == 0) {
-//                 answer = i;
-//             }
-//         }
-            
-//         return answer;
+class MyQueue {
+    Stack<Integer> pushStack;
+    Stack<Integer> popStack;
+
+    public MyQueue() {
+        pushStack = new Stack<>();
+        popStack = new Stack<>();
     }
     
-    public List<Integer> findOrder(TreeNode root) {
-        //base case
-        if (root == null) {
-            return new ArrayList<>();
-        }
-        
-        List<Integer> smalList = new ArrayList<>();
-        smalList.addAll(findOrder(root.left));
-        smalList.add(root.val);
-        smalList.addAll(findOrder(root.right));
-        
-        return smalList;
+    // O(1)
+    public void push(int x) {
+        pushStack.push(x);
     }
     
-    public int usingPQ(TreeNode root, int k) {
-        //edge case
-        if (root == null) {
-            return 0;
-        }
-        
-        PriorityQueue<TreeNode> pq = new PriorityQueue<>((a,b) -> b.val - a.val);
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.offer(root);
-        while (!queue.isEmpty()) {
-            TreeNode curr = queue.poll();
-            pq.offer(curr);
-            if (pq.size() > k) {
-                pq.poll();
+    //O(n)
+    public int pop() {
+        //calling peek to transfer all elements from pushStack to popStack
+        peek();
+        return popStack.pop();
+    }
+    
+    //Peek always happens at popStack
+    public int peek() {
+        if (popStack.isEmpty()) {
+            while (!pushStack.isEmpty()) {
+                popStack.push(pushStack.pop());
             }
-            if (curr.left != null)  queue.offer(curr.left);
-            if (curr.right != null) queue.offer(curr.right);
         }
-        return pq.peek().val;
+        return popStack.peek();
+    }
+    
+    public boolean empty() {
+        return pushStack.isEmpty() && popStack.isEmpty();
     }
 }
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue obj = new MyQueue();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.peek();
+ * boolean param_4 = obj.empty();
+ */
